@@ -31,7 +31,7 @@ message LocateBookResponse {
 
 message BorrowBookRequest {
     string userID = 1;
-    string ISBN = 2;
+cd    string ISBN = 2;
 }
 
 
