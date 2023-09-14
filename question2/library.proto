@@ -43,12 +43,12 @@ message User {
 // Service Definition
 service library_service {
     rpc addBook(Book) returns (AddBookResponse);
-    rpc createUser(stream User) returns (google.protobuf.Empty);
-    rpc updateBook(Book) returns (google.protobuf.Empty);
+    rpc createUser(stream User) returns (createUserResponse);
+    rpc updateBook(Book) returns (updateBookResponse);
     rpc removeBook(Book) returns (RemoveBookResponse);
     rpc listAvailableBooks(google.protobuf.Empty) returns (stream Book);
     rpc locateBook(Book) returns (LocateBookResponse);
-    rpc borrowBook(BorrowBookRequest) returns (google.protobuf.Empty);
+    rpc borrowBook(BorrowBookRequest) returns (BorrowBookResponse);
 }
 
  

@@ -1,4 +1,5 @@
 import ballerina/grpc;
+import ballerina/io;
 
 listener grpc:Listener ep = new (9090);
 
@@ -6,8 +7,31 @@ listener grpc:Listener ep = new (9090);
 service "library_service" on ep {
 
     remote function addBook(Book value) returns AddBookResponse|error {
+        //create a record 
+        Book book ={
+            title: "request.title",
+            author_1: "request.author_1",
+            author_2: "request.author_2",
+            location: "request.location",
+            ISBN: "request.ISBN",
+            status: "true"
+        
+
+        };
+        //Adding a book to the library collection
+        library.addBook(book);
+
+        //response message
+        AddBookResponse response= {
+            ISBN: book.ISBN
+        };
+        return response;
+
     }
     remote function updateBook(Book value) returns error? {
+        library.updateBook(Book);
+
+        
     }
     remote function removeBook(Book value) returns RemoveBookResponse|error {
     }
