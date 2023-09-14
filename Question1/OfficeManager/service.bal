@@ -3,6 +3,7 @@ import ballerina/http;
 # A service representing a network-accessible API
 # bound to port `9090`.
 service / on new http:Listener(9090) {
+
     # A resource for generating greetings
     # + name - the input string name
     # + return - string name with hello message or error
@@ -13,7 +14,38 @@ service / on new http:Listener(9090) {
         }
         return "Hello, " + name;
     }
+
+ resource function post addLecturer(int staffNumber, string staffName, string title, int officeNumber, list<Course> courseList) returns Staff|error {
+    if staffNumber is "" {
+        return error("staffNumber should not be empty!");
+    }
+    if staffName is "" {
+        return error("staffName should not be empty!");
+    }
+    if title is "" {
+        return error("title should not be empty!");
+    }
+    if officeNumber is "" {
+        return error("officeNumber should not be empty!");
+    }
+    if courseList is ""{
+        return error("courseList should not be empty!");
+
+
 }
+
+//  lecturer object created
+    Staff newLecturer = {
+        staffNumber: staffNumber,
+        staffName: staffName,
+        title: title,
+        officeNumber: officeNumber,
+        courseList: courseList
+    };
+
+
+
+ }
 
 public table<Staff> key(staffNumber) staffTable = table[
     {staffNumber: 100, staffName: "Steven Tjiraso", courseList: [{courseCode: "DSA511S", courseName: "Data Structures & Algorithms", NQFLevel: 5},{courseCode: "ICG511S", courseName: "Introduction to Computing", NQFLevel: 5}], officeNumber: 201, title: "Mr"},
@@ -23,3 +55,4 @@ public table<Staff> key(staffNumber) staffTable = table[
     {staffNumber: 105, staffName: "Victoria Shakela", courseList: [{courseCode: "ISS611S", courseName: "Information System Security Essentials", NQFLevel: 6}],officeNumber: 110, title: "Ms"}
 ];
 
+}
