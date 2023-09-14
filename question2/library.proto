@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package library;
+
+import "google/protobuf/empty.proto";
+
+// Book message
+message Book {
+    string title = 1;
+    string author_1 = 2;
+    string author_2 = 3;  // optional field
+    string location = 4;
+    string ISBN = 5;
+    string status = 6;    // "available" or "borrowed"
+}
+
+// Response messages
+message AddBookResponse {
+    string ISBN = 1;
+}
+
+ 
+ message RemoveBookResponse {
+    repeated Book books = 1;
+}
+
+message LocateBookResponse {
+    string location = 1;
+    string message = 2;  // "Available" or "Not Available"
+}
+
+message BorrowBookRequest {
+    string userID = 1;
+    string ISBN = 2;
+}
+
+
+message User {
+    string userID = 1;
+    string profile = 2;  // "student" or "librarian"
+}
+
+// Service Definition
+service library_service {
+    rpc addBook(Book) returns (AddBookResponse);
+    rpc createUser(stream User) returns (google.protobuf.Empty);
+    rpc updateBook(Book) returns (google.protobuf.Empty);
+    rpc removeBook(Book) returns (RemoveBookResponse);
+    rpc listAvailableBooks(google.protobuf.Empty) returns (stream Book);
+    rpc locateBook(Book) returns (LocateBookResponse);
+    rpc borrowBook(BorrowBookRequest) returns (google.protobuf.Empty);
+}
+
+ 
