@@ -2,7 +2,6 @@ syntax = "proto3";
 
 package library;
 
-import "google/protobuf/empty.proto";
 
 // Book message
 message Book {
@@ -23,6 +22,7 @@ message AddBookResponse {
  message RemoveBookResponse {
     repeated Book books = 1;
 }
+
 
 message LocateBookResponse {
     string location = 1;
