@@ -1,14 +1,15 @@
-
-public type Staff record {
+type Staff record {
     readonly int staffNumber;
-    int officeNumber;
     string staffName;
     string title;
-    Course[] courseList;
+    int officeNumber;
+    CourseList[] courseList;
+
 };
 
-public type Course record {
-    readonly string courseCode;
+type CourseList record {
+    string courseCode;
     string courseName;
-    int NQFLevel;
+    string NQFLevel;
 };
+ 
