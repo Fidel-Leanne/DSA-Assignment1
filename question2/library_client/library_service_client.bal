@@ -2,34 +2,6 @@ import ballerina/io;
 
 library_serviceClient ep = check new ("http://localhost:9090");
 
-type AddBookResponse record {
-
-};
-
-type Book record {
-
-};
-
-type RemoveBookResponse record {
-
-};
-
-type LocateBookResponse record {
-
-};
-
-type BorrowBookRequest record {
-
-};
-
-type CreateUserStreamingClient record {
-
-};
-
-type User record {
-
-};
-
 public function main() returns error? {
     Book addBookRequest = {title: "ballerina", author_1: "ballerina", author_2: "ballerina", location: "ballerina", ISBN: "ballerina", status: "ballerina"};
     AddBookResponse addBookResponse = check ep->addBook(addBookRequest);
