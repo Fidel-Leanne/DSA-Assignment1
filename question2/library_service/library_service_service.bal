@@ -1,8 +1,11 @@
 import ballerina/grpc;
+<<<<<<< HEAD
 import ballerina/protobuf;
 import ballerina/lang.value as value1;
 import ballerina/io;
 import ballerina/uuid;
+=======
+>>>>>>> 8664b8a9d6190d685fcf6e1b2fdc2311d561f844
 
 listener grpc:Listener ep = new (9090);
 
@@ -35,6 +38,7 @@ table<BorrowBook> key(id) borrowBookTable = table[];
 @grpc:Descriptor {value: LIBRARY_DESC}
 service "library_service" on ep {
 
+<<<<<<< HEAD
     remote function addBook(Book value) returns string {
         booksTable.add(value);
         return value.ISBN;
@@ -82,6 +86,11 @@ service "library_service" on ep {
         return booksTable;
         
     
+=======
+    remote function addBook(Book value) returns AddBookResponse|error {
+    }
+    remote function updateBook(Book value) returns error? {
+>>>>>>> 8664b8a9d6190d685fcf6e1b2fdc2311d561f844
     }
     remote function locateBook(Book value) returns string|error {
 
