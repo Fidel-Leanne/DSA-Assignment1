@@ -2,7 +2,6 @@ import ballerina/grpc;
 import ballerina/protobuf;
 import ballerina/lang.value as value1;
 import ballerina/io;
-import ballerina/uuid;
 
 listener grpc:Listener ep = new (9090);
 
@@ -14,23 +13,15 @@ type BookRecord record {
     string location;
     boolean status;
 };
-
 table<Book> key(ISBN) booksTable = table[
     {title: "The Great Gatbsy", author_1: "F.Scott Fitzgerald", location: "Shelf a", ISBN: "9780743273565", status: true},
     {title: "Moby Dick",author_1: "Herman Melville", location: "Shelf B", ISBN: "9781853260087", status: false},
     {title: "pride and Prejudice", author_1: "Jane Austen", author_2: "Another Author", location: "Shelf C",ISBN: "9781853260001", status: true}
 ];
 
-type BorrowBook record {|
-readonly string id;
-string userID;
-string ISBN;
-|};
-
-table<BorrowBook> key(id) borrowBookTable = table[];
-
-
-
+type BorrowBook record {
+    
+};
 
 @grpc:Descriptor {value: LIBRARY_DESC}
 service "library_service" on ep {
@@ -46,7 +37,7 @@ service "library_service" on ep {
             author_2: "Thandeka Sibanda",
             location: "Shelf D ",
             ISBN: "9780195709612",
-            status: false
+            status: "not available"
 
              };
 
@@ -56,7 +47,7 @@ service "library_service" on ep {
     remote function updateBook(Book value) returns Book|error {
         // BookRecord book = booksTable.get(value.ISBN);
 
-        if (value.status is null){
+        if (value.status === ""){
             return error ("Book not available");
         }
 
@@ -97,19 +88,25 @@ service "library_service" on ep {
         }
     
     }
-    remote function borrowBook(BorrowBookRequest value) returns string|error {
-        
-        string id = uuid:createType1AsString();
+    remote function borrowBook(BorrowBookRequest value) returns BookRecord|error {
+        Book book = booksTable.get(value.ISBN);
 
-        if (value.userID is null || value.ISBN is null){
-            return error("User id or isbn not provided");
+        if (book.status is null){
+            return error("Book not found");
         }
+        if (book.status != true){
+            return error ("Book is not availbale");
+        }
+         book.status = false;
 
-        error? borrowBook = borrowBookTable.add({id, ...value});
-        if borrowBook is error{
-            return error("Failed to borrow a Book");
-        }
-        return "Successfully borrowed a book";
+         booksTable.put(BookRecord);
+
+         BorrowBook BorrowBook ={
+            userID: " 221029397",
+            ISBN: "9780743273565",
+            
+         };
+        return book;
 
     }
     remote function createUser(stream<User, grpc:Error?> clientStream) returns error? {
