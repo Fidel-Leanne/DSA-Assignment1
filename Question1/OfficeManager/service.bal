@@ -113,7 +113,7 @@ resource function delete Lecturer(int staffNumber) returns error? {
   Staff remove = staffTable.remove( staffNumber);
 
   // Return success.
-  return nil;
+  return null;
 }
 
 
