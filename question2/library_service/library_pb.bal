@@ -1,8 +1,9 @@
 import ballerina/grpc;
 import ballerina/protobuf;
 import ballerina/protobuf.types.empty;
+import ballerina/protobuf.types.wrappers;
 
-public const string LIBRARY_DESC = "0A0D6C6962726172792E70726F746F12076C6962726172791A1B676F6F676C652F70726F746F6275662F656D7074792E70726F746F229A010A04426F6F6B12140A057469746C6518012001280952057469746C6512190A08617574686F725F311802200128095207617574686F723112190A08617574686F725F321803200128095207617574686F7232121A0A086C6F636174696F6E18042001280952086C6F636174696F6E12120A044953424E18052001280952044953424E12160A06737461747573180620012808520673746174757322250A0F416464426F6F6B526573706F6E736512120A044953424E18012001280952044953424E22390A1252656D6F7665426F6F6B526573706F6E736512230A05626F6F6B7318012003280B320D2E6C6962726172792E426F6F6B5205626F6F6B73224A0A124C6F63617465426F6F6B526573706F6E7365121A0A086C6F636174696F6E18012001280952086C6F636174696F6E12180A076D65737361676518022001280952076D657373616765223F0A11426F72726F77426F6F6B5265717565737412160A06757365724944180120012809520675736572494412120A044953424E18022001280952044953424E22380A045573657212160A06757365724944180120012809520675736572494412180A0770726F66696C65180220012809520770726F66696C6532A6030A0F6C6962726172795F7365727669636512320A07616464426F6F6B120D2E6C6962726172792E426F6F6B1A182E6C6962726172792E416464426F6F6B526573706F6E736512350A0A63726561746555736572120D2E6C6962726172792E557365721A162E676F6F676C652E70726F746F6275662E456D707479280112330A0A757064617465426F6F6B120D2E6C6962726172792E426F6F6B1A162E676F6F676C652E70726F746F6275662E456D70747912380A0A72656D6F7665426F6F6B120D2E6C6962726172792E426F6F6B1A1B2E6C6962726172792E52656D6F7665426F6F6B526573706F6E7365123D0A126C697374417661696C61626C65426F6F6B7312162E676F6F676C652E70726F746F6275662E456D7074791A0D2E6C6962726172792E426F6F6B300112380A0A6C6F63617465426F6F6B120D2E6C6962726172792E426F6F6B1A1B2E6C6962726172792E4C6F63617465426F6F6B526573706F6E736512400A0A626F72726F77426F6F6B121A2E6C6962726172792E426F72726F77426F6F6B526571756573741A162E676F6F676C652E70726F746F6275662E456D707479620670726F746F33";
+public const string LIBRARY_DESC = "0A0D6C6962726172792E70726F746F12076C6962726172791A1B676F6F676C652F70726F746F6275662F656D7074792E70726F746F1A1E676F6F676C652F70726F746F6275662F77726170706572732E70726F746F229A010A04426F6F6B12140A057469746C6518012001280952057469746C6512190A08617574686F725F311802200128095207617574686F723112190A08617574686F725F321803200128095207617574686F7232121A0A086C6F636174696F6E18042001280952086C6F636174696F6E12120A044953424E18052001280952044953424E12160A06737461747573180620012808520673746174757322250A0F416464426F6F6B526573706F6E736512120A044953424E18012001280952044953424E22390A1252656D6F7665426F6F6B526573706F6E736512230A05626F6F6B7318012003280B320D2E6C6962726172792E426F6F6B5205626F6F6B73224A0A124C6F63617465426F6F6B526573706F6E7365121A0A086C6F636174696F6E18012001280952086C6F636174696F6E12180A076D65737361676518022001280952076D657373616765223F0A11426F72726F77426F6F6B5265717565737412160A06757365724944180120012809520675736572494412120A044953424E18022001280952044953424E22380A045573657212160A06757365724944180120012809520675736572494412180A0770726F66696C65180220012809520770726F66696C6532B8030A0F6C6962726172795F7365727669636512320A07616464426F6F6B120D2E6C6962726172792E426F6F6B1A182E6C6962726172792E416464426F6F6B526573706F6E7365123B0A0A63726561746555736572120D2E6C6962726172792E557365721A1C2E676F6F676C652E70726F746F6275662E537472696E6756616C7565280112390A0A757064617465426F6F6B120D2E6C6962726172792E426F6F6B1A1C2E676F6F676C652E70726F746F6275662E537472696E6756616C756512380A0A72656D6F7665426F6F6B120D2E6C6962726172792E426F6F6B1A1B2E6C6962726172792E52656D6F7665426F6F6B526573706F6E7365123D0A126C697374417661696C61626C65426F6F6B7312162E676F6F676C652E70726F746F6275662E456D7074791A0D2E6C6962726172792E426F6F6B300112380A0A6C6F63617465426F6F6B120D2E6C6962726172792E426F6F6B1A1B2E6C6962726172792E4C6F63617465426F6F6B526573706F6E736512460A0A626F72726F77426F6F6B121A2E6C6962726172792E426F72726F77426F6F6B526571756573741A1C2E676F6F676C652E70726F746F6275662E537472696E6756616C7565620670726F746F33";
 
 public isolated client class library_serviceClient {
     *grpc:AbstractClientEndpoint;
@@ -42,19 +43,7 @@ public isolated client class library_serviceClient {
         return {content: <AddBookResponse>result, headers: respHeaders};
     }
 
-    isolated remote function updateBook(Book|ContextBook req) returns grpc:Error? {
-        map<string|string[]> headers = {};
-        Book message;
-        if req is ContextBook {
-            message = req.content;
-            headers = req.headers;
-        } else {
-            message = req;
-        }
-        _ = check self.grpcClient->executeSimpleRPC("library.library_service/updateBook", message, headers);
-    }
-
-    isolated remote function updateBookContext(Book|ContextBook req) returns empty:ContextNil|grpc:Error {
+    isolated remote function updateBook(Book|ContextBook req) returns string|grpc:Error {
         map<string|string[]> headers = {};
         Book message;
         if req is ContextBook {
@@ -64,8 +53,22 @@ public isolated client class library_serviceClient {
             message = req;
         }
         var payload = check self.grpcClient->executeSimpleRPC("library.library_service/updateBook", message, headers);
-        [anydata, map<string|string[]>] [_, respHeaders] = payload;
-        return {headers: respHeaders};
+        [anydata, map<string|string[]>] [result, _] = payload;
+        return result.toString();
+    }
+
+    isolated remote function updateBookContext(Book|ContextBook req) returns wrappers:ContextString|grpc:Error {
+        map<string|string[]> headers = {};
+        Book message;
+        if req is ContextBook {
+            message = req.content;
+            headers = req.headers;
+        } else {
+            message = req;
+        }
+        var payload = check self.grpcClient->executeSimpleRPC("library.library_service/updateBook", message, headers);
+        [anydata, map<string|string[]>] [result, respHeaders] = payload;
+        return {content: result.toString(), headers: respHeaders};
     }
 
     isolated remote function removeBook(Book|ContextBook req) returns RemoveBookResponse|grpc:Error {
@@ -124,19 +127,7 @@ public isolated client class library_serviceClient {
         return {content: <LocateBookResponse>result, headers: respHeaders};
     }
 
-    isolated remote function borrowBook(BorrowBookRequest|ContextBorrowBookRequest req) returns grpc:Error? {
-        map<string|string[]> headers = {};
-        BorrowBookRequest message;
-        if req is ContextBorrowBookRequest {
-            message = req.content;
-            headers = req.headers;
-        } else {
-            message = req;
-        }
-        _ = check self.grpcClient->executeSimpleRPC("library.library_service/borrowBook", message, headers);
-    }
-
-    isolated remote function borrowBookContext(BorrowBookRequest|ContextBorrowBookRequest req) returns empty:ContextNil|grpc:Error {
+    isolated remote function borrowBook(BorrowBookRequest|ContextBorrowBookRequest req) returns string|grpc:Error {
         map<string|string[]> headers = {};
         BorrowBookRequest message;
         if req is ContextBorrowBookRequest {
@@ -146,8 +137,22 @@ public isolated client class library_serviceClient {
             message = req;
         }
         var payload = check self.grpcClient->executeSimpleRPC("library.library_service/borrowBook", message, headers);
-        [anydata, map<string|string[]>] [_, respHeaders] = payload;
-        return {headers: respHeaders};
+        [anydata, map<string|string[]>] [result, _] = payload;
+        return result.toString();
+    }
+
+    isolated remote function borrowBookContext(BorrowBookRequest|ContextBorrowBookRequest req) returns wrappers:ContextString|grpc:Error {
+        map<string|string[]> headers = {};
+        BorrowBookRequest message;
+        if req is ContextBorrowBookRequest {
+            message = req.content;
+            headers = req.headers;
+        } else {
+            message = req;
+        }
+        var payload = check self.grpcClient->executeSimpleRPC("library.library_service/borrowBook", message, headers);
+        [anydata, map<string|string[]>] [result, respHeaders] = payload;
+        return {content: result.toString(), headers: respHeaders};
     }
 
     isolated remote function createUser() returns CreateUserStreamingClient|grpc:Error {
@@ -189,22 +194,23 @@ public client class CreateUserStreamingClient {
         return self.sClient->send(message);
     }
 
-    isolated remote function receive() returns grpc:Error? {
+    isolated remote function receiveString() returns string|grpc:Error? {
         var response = check self.sClient->receive();
         if response is () {
             return response;
         } else {
-            _ = response;
+            [anydata, map<string|string[]>] [payload, _] = response;
+            return payload.toString();
         }
     }
 
-    isolated remote function receiveContextNil() returns empty:ContextNil|grpc:Error? {
+    isolated remote function receiveContextString() returns wrappers:ContextString|grpc:Error? {
         var response = check self.sClient->receive();
         if response is () {
             return response;
         } else {
-            [anydata, map<string|string[]>] [_, headers] = response;
-            return {headers: headers};
+            [anydata, map<string|string[]>] [payload, headers] = response;
+            return {content: payload.toString(), headers: headers};
         }
     }
 
@@ -238,30 +244,6 @@ public class BookStream {
 
     public isolated function close() returns grpc:Error? {
         return self.anydataStream.close();
-    }
-}
-
-public client class Library_serviceNilCaller {
-    private grpc:Caller caller;
-
-    public isolated function init(grpc:Caller caller) {
-        self.caller = caller;
-    }
-
-    public isolated function getId() returns int {
-        return self.caller.getId();
-    }
-
-    isolated remote function sendError(grpc:Error response) returns grpc:Error? {
-        return self.caller->sendError(response);
-    }
-
-    isolated remote function complete() returns grpc:Error? {
-        return self.caller->complete();
-    }
-
-    public isolated function isCancelled() returns boolean {
-        return self.caller.isCancelled();
     }
 }
 
@@ -393,6 +375,38 @@ public client class Library_serviceAddBookResponseCaller {
     }
 }
 
+public client class Library_serviceStringCaller {
+    private grpc:Caller caller;
+
+    public isolated function init(grpc:Caller caller) {
+        self.caller = caller;
+    }
+
+    public isolated function getId() returns int {
+        return self.caller.getId();
+    }
+
+    isolated remote function sendString(string response) returns grpc:Error? {
+        return self.caller->send(response);
+    }
+
+    isolated remote function sendContextString(wrappers:ContextString response) returns grpc:Error? {
+        return self.caller->send(response);
+    }
+
+    isolated remote function sendError(grpc:Error response) returns grpc:Error? {
+        return self.caller->sendError(response);
+    }
+
+    isolated remote function complete() returns grpc:Error? {
+        return self.caller->complete();
+    }
+
+    public isolated function isCancelled() returns boolean {
+        return self.caller.isCancelled();
+    }
+}
+
 public type ContextUserStream record {|
     stream<User, error?> content;
     map<string|string[]> headers;
@@ -451,7 +465,7 @@ public type Book record {|
     string author_1 = "";
     string author_2 = "";
     string location = "";
-    readonly string ISBN = "";
+    string ISBN = "";
     boolean status = false;
 |};
 

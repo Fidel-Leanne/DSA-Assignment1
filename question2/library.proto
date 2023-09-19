@@ -45,7 +45,7 @@ message User {
 // Service Definition
 service library_service {
     rpc addBook(Book) returns (AddBookResponse);
-    rpc createUser(stream User) returns (ggoogle.protobuf.StringValue);
+    rpc createUser(stream User) returns (google.protobuf.StringValue);
     rpc updateBook(Book) returns (google.protobuf.StringValue
     );
     rpc removeBook(Book) returns (RemoveBookResponse);
