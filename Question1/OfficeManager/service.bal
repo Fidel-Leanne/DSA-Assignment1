@@ -15,31 +15,38 @@ service / on new http:Listener(9090) {
     # A resource for generating greetings
     # + name - the input string name
     # + return - string name with hello message or error
-    resource function post addLecturer(int staffNumber, string staffName, string title, int officeNumber, CourseList courseList) returns Staff|error {
-        if staffNumber is "" {
+    resource function post addLecturer(@http:Payload Staff lecturer) returns http:Response|error {
+        if lecturer.staffNumber is "" {
             return error("staffNumber should not be empty!");
         }
-        if staffName is "" {
+        else if lecturer.staffName is "" {
             return error("staffName should not be empty!");
         }
-        if title is "" {
+        else if lecturer.title is "" {
             return error("title should not be empty!");
         }
-        if officeNumber is "" {
+        else if lecturer.officeNumber is "" {
             return error("officeNumber should not be empty!");
         }
-        if courseList is "" {
+        else if lecturer.courseList is "" {
             return error("courseList should not be empty!");
+        }
+        else {
+            staffTable.add(lecturer);
+            http:Response post_resp = new;
+            post_resp.statusCode = http:STATUS_CREATED;
+            post_resp.setPayload({id: lecturer.staffNumber});
+            return post_resp;
         }
 
         //  lecturer object created
-        Staff newLecturer = {
-            staffNumber: staffNumber,
-            staffName: staffName,
-            title: title,
-            officeNumber: officeNumber,
-            courseList: [courseList]
-        };
+        // Staff newLecturer = {
+        //     staffNumber: staffNumber,
+        //     staffName: staffName,1a
+        //     title: title,
+        //     officeNumber: officeNumber,
+        //     courseList: [courseList]
+        // };
     }
 
     // A resource for retrieving a list of all lecturers within the faculty
@@ -77,24 +84,27 @@ service / on new http:Listener(9090) {
         }
     }
     // A resource for getting a lecturer by staff number.
-    resource function get Lecturer(int staffNumber) returns Staff?|error {
+    resource function get Lecturer/[int staffNumber] () returns Staff?|error {
         // Get the lecturer from the table.
         Staff? lecturer = staffTable[staffNumber];
-        if lecturer is error {
+        if lecturer is () {
             return error(string `Lecturer with staff number ${staffNumber} staffNumber not found!`);
-        }
+        }else {
         // Return the lecturer.
-        return lecturer;
+        return lecturer;    
+        }
+        
     }
 
     // resource function for updating an existing lecturers information
-    resource function put updateLecturer(int staffNumber, string staffName, string title, string officeNumber, CourseList[] courseList) returns Staff|error {
-        // Get the lecturer from the table.
-        Staff? lecturer = staffTable[staffNumber];
+    resource function put updateLecturer/[int staffNumber](@http:Payload Staff lecturer) returns Staff|error {
 
+
+        // Get the lecturer from the table.
+        staffTable.put(lecturer);
         // If the lecturer is not found, return an error.
         if lecturer is error {
-            return error(string `Lecturer with staff number ${staffNumber} staffNumber not found!`);
+            return error(string `Lecturer with staff number ${lecturer.staffNumber} staffNumber not found!`);
         }
     }
 
@@ -103,7 +113,7 @@ service / on new http:Listener(9090) {
         Staff? lecturer = staffTable[staffNumber];
 
         // If the lecturer is not found, return an error.
-        if lecturer is error {
+        if lecturer is () {
             return error(string `Lecturer with staff number ${staffNumber} staffNumber not found`);
         }
 
