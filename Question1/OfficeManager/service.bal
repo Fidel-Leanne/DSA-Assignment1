@@ -15,21 +15,29 @@ service / on new http:Listener(9090) {
     # A resource for generating greetings
     # + name - the input string name
     # + return - string name with hello message or error
-    resource function post addLecturer(int staffNumber, string staffName, string title, int officeNumber, CourseList courseList) returns Staff|error {
-        if staffNumber === 0 {
+    resource function post addLecturer(@http:Payload Staff lecturer) returns http:Response|error {
+        if lecturer.staffNumber is "" {
             return error("staffNumber should not be empty!");
         }
-        if staffName is "" {
+        else if lecturer.staffName is "" {
             return error("staffName should not be empty!");
         }
-        if title is "" {
+        else if lecturer.title is "" {
             return error("title should not be empty!");
         }
         if officeNumber === 0 {
+        else if lecturer.officeNumber is "" {
             return error("officeNumber should not be empty!");
         }
-        if courseList.length()===0 {
+        if lecturer.courseList.length()===0 {
             return error("courseList should not be empty!");
+            }
+        else {
+            staffTable.add(lecturer);
+            http:Response post_resp = new;
+            post_resp.statusCode = http:STATUS_CREATED;
+            post_resp.setPayload({id: lecturer.staffNumber});
+            return post_resp;
         }
 
         //  lecturer object created
@@ -87,12 +95,12 @@ service / on new http:Listener(9090) {
         }
     }
     // A resource for getting a lecturer by staff number.
-    resource function get Lecturer(int staffNumber) returns Staff?|error {
+    resource function get Lecturer/[int staffNumber] () returns Staff?|error {
         // Get the lecturer from the table.
         Staff? lecturer = staffTable[staffNumber];
-        if lecturer is error {
+        if lecturer is () {
             return error(string `Lecturer with staff number ${staffNumber} staffNumber not found!`);
-        }
+        }else {
         // Return the lecturer.
         return lecturer;
     }
