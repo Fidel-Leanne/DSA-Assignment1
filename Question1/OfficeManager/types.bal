@@ -3,13 +3,13 @@ type Staff record {
     string staffName;
     string title;
     int officeNumber;
-    CourseList[] courseList;
-
+   CourseList[] courseList; 
 };
 
+//CourseList[] courseList;
 type CourseList record {
     string courseCode;
     string courseName;
-    string NQFLevel;
+    int NQFLevel;
 };
  
