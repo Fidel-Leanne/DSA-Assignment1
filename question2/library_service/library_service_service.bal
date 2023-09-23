@@ -44,31 +44,92 @@ table<BorrowBook> key(id) borrowBookTable = table [];
 service "library_service" on ep {
 
     remote function addBook(BookRecord value) returns string {
+        if (!value.status) {
+            return error ("Book not available");
+        }
+
+        booksTable.put(value);
+
+        return book;
 
     }
-    remote function updateBook(BookRecord value) returns BookRecord|error {
+    remote function updateBook(BookRecord value) returns table<BookRecord> key(ISBN)|error {
+        BookRecord book = booksTable.get(value.ISBN);
+
+        if (!value.status) {
+            return error("Book not found");
+        }
+        //remove book from the list 
+        BookRecord book_ = booksTable.remove(value.ISBN);
+
+        return booksTable;
+
 
     }
 
     remote function removeBook(Book value) returns table<BookRecord> key(ISBN)|error {
+        BookRecord book = booksTable.get(value.ISBN);
+
+        if (!value.status) {
+            return error("Book not found");
+        }
+        //remove book from the list 
+        BookRecord book_ = booksTable.remove(value.ISBN);
+
+        return booksTable;
 
     }
 
     remote function locateBook(Book value) returns string|error {
+        BookRecord book = booksTable.get(value.ISBN);
+
+        if (!value.status) {
+            return error("Book not found");
+        }
+        if (book.status != true) {
+            return error("Book is not available");
+        } else {
+            return book.location;
+        }
 
     }
     remote function borrowBook(BorrowBookRequest value) returns string|error {
+        string id = uuid:createType1AsString();
+
+        if (value.userID ===""|| value.ISBN === "") {
+            return error("User id or isbn not provided");
+        }
+
+        error? borrowBook = borrowBookTable.add({id, ...value});
+        if borrowBook is error {
+            return error("Failed to borrow a Book");
+        }
+        return "Successfully borrowed a book";
 
     }
     remote function createUser(stream<user, grpc:Error?> clientStream) returns error? {
+
 
     }
 
     // Return any error that might have occurred during the stream processing
 
     remote function listAvailableBooks() returns stream<BookRecord, error?>|error {
+        BookRecord[] availableBooks = [];
+    
+    // Iterate over the book entries in the table
+    foreach var book in booksTable {
+        if (book.status) {
+            availableBooks.push(book);
+        }
+    }
+
+    // Convert array to stream
+    return availableBooks.toStream();
+}
+
 
     }
 
-}
+
 
