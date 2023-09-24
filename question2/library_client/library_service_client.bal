@@ -40,20 +40,20 @@ Book, error?> listAvailableBooksResponse = check ep->listAvailableBooks();
         // ... Add other options ...
         io:println("9. Exit");
 
-        string choice = check io:readln("Enter your choice: ");
+        string choice = io:readln("Enter your choice: ");
 
         if (choice == "1") {
             Book book = {};
-            book.title = check io:readln("Enter book title: ");
-            book.author_1 = check io:readln("Enter primary author: ");
-            book.author_2 = check io:readln("Enter secondary author (Press Enter to skip): ");
+            book.title = io:readln("Enter book title: ");
+            book.author_1 = io:readln("Enter primary author: ");
+            book.author_2 = io:readln("Enter secondary author (Press Enter to skip): ");
             // ... Capture other book details ...
             AddBookResponse response = check ep->addBook(book);
             io:println(response);
         } else if (choice == "2") {
             // Handle update book
 
-            string isbnToUpdate = check io:readln("Enter the ISBN of the book you wish to update: ");
+            string isbnToUpdate = io:readln("Enter the ISBN of the book you wish to update: ");
 
             // Check if the book exists
             // Ideally, we'd have an endpoint on the server to check this, but since we don't,
@@ -61,14 +61,14 @@ Book, error?> listAvailableBooksResponse = check ep->listAvailableBooks();
 
             Book updatedBook = {};
             updatedBook.ISBN = isbnToUpdate;
-            updatedBook.title = check io:readln("Enter new title (or press Enter to skip): ");
-            updatedBook.author_1 = check io:readln("Enter new primary author (or press Enter to skip): ");
-            string secondaryAuthor = check io:readln("Enter new secondary author (or press Enter to skip): ");
+            updatedBook.title = io:readln("Enter new title (or press Enter to skip): ");
+            updatedBook.author_1 = io:readln("Enter new primary author (or press Enter to skip): ");
+            string secondaryAuthor = io:readln("Enter new secondary author (or press Enter to skip): ");
             if (secondaryAuthor != "") {
                 updatedBook.author_2 = secondaryAuthor;
             }
-            updatedBook.location = check io:readln("Enter new location (or press Enter to skip): ");
-            string statusInput = check io:readln("Is the book available? (yes/no): ");
+            updatedBook.location = io:readln("Enter new location (or press Enter to skip): ");
+            string statusInput = io:readln("Is the book available? (yes/no): ");
             updatedBook.status = (statusInput.toLowerAscii() == "yes") ? true : false;
 
             // Send updated details to the server
@@ -79,7 +79,7 @@ Book, error?> listAvailableBooksResponse = check ep->listAvailableBooks();
         else if (choice == "3") {
             // Handle remove book
 
-            string isbnToRemove = check io:readln("Enter the ISBN of the book you wish to remove: ");
+            string isbnToRemove = io:readln("Enter the ISBN of the book you wish to remove: ");
 
             // Construct the book removal request
             Book removeRequest = {ISBN: isbnToRemove};
