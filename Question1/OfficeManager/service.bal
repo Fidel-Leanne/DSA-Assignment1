@@ -44,53 +44,84 @@ service / on new http:Listener(9090) {
     }
 
     // A resource for retrieving a list of all lecturers within the faculty
-    resource function get allLecturers() returns Staff[]|error {
-        return staffTable.toArray();
+    resource function get allLecturers() returns http:Response {
+        http:Response getResponse = new;
+        getResponse.statusCode = http:STATUS_OK;
+        getResponse.setPayload(staffTable.toJson());
+        return getResponse;
     }
 
     // A resource for retrieving all the lecturers that teach a certain course
-    resource function get courseLecturer/[string searchCourse]() returns Staff[]|error {
-
+    resource function get courseLecturer/[string searchCourse]() returns http:Response {
         Staff[] staffList = [];
-        foreach Staff staff in staffTable {
 
+        http:Response getResponse = new;
+        getResponse.statusCode = http:STATUS_OK;
+
+        foreach Staff staff in staffTable {
             var staffcourse = staff.courseList.filter((courseValue) => courseValue.courseCode === searchCourse);
             if staffcourse.length() > 0 {
                 staffList.push(staff);
             }
         }
+
         if staffList.length() == 0 {
-            return error(string `${searchCourse} does not have any lecturers assigned to it!`);
+            getResponse.statusCode = http:STATUS_NOT_FOUND;
+            getResponse.setPayload(string `${searchCourse} does not have any lecturers assigned to it!`);
+            return getResponse;
         } else {
-            return staffList;
+            getResponse.statusCode = http:STATUS_OK;
+            getResponse.setPayload(staffList.toJson());
+            return getResponse;
         }
     }
 
     // A resource for retrieving all the lecturers that sit in the same office
-    resource function get officeLecturer/[int officeNumber]() returns Staff[]|error {
+    resource function get officeLecturer/[int officeNumber]() returns http:Response {
         Staff[] staffList = [];
+
+        http:Response getResponse = new;
+        getResponse.statusCode = http:STATUS_OK;
+
+
         foreach Staff staff in staffTable {
             if staff.officeNumber == officeNumber {
                 staffList.push(staff);
             }
         }
+
         if staffList.length() == 0 {
-            return error(string `${officeNumber} does not have any lecturers assigned to it!`);
+            getResponse.statusCode = http:STATUS_NOT_FOUND;
+            getResponse.setPayload(string `${officeNumber} does not have any lecturers assigned to it!`);
+            return getResponse;
         } else {
-            return staffList;
+            getResponse.statusCode = http:STATUS_OK;
+            getResponse.setPayload(staffList.toJson());
+            return getResponse;
         }
     }
+
     // A resource for getting a lecturer by staff number.
-    resource function get Lecturer/[int staffNumber]() returns Staff?|error {
+    resource function get Lecturer/[int staffNumber]() returns http:Response {
         // Get the lecturer from the table.
         Staff? lecturer = staffTable[staffNumber];
+
+        http:Response getResponse = new;
+        getResponse.statusCode = http:STATUS_OK;
+
+
         if lecturer is () {
-            return error(string `Lecturer with staff number ${staffNumber} staffNumber not found!`);
+            getResponse.statusCode = http:STATUS_NOT_FOUND;
+            getResponse.setPayload(string `Lecturer with staff number ${staffNumber} staffNumber not found!`);
+            return getResponse;
         } else {
             // Return the lecturer.
-            return lecturer;
+            getResponse.statusCode = http:STATUS_OK;
+            getResponse.setPayload(lecturer.toJson());
+            return getResponse;
         }
     }
+    
     // resource function for updating an existing lecturers information
     resource function put updateLecturer(@http:Payload Staff lecturer) returns http:Response {
 

@@ -3,7 +3,7 @@ public type Staff record {
     string staffName;
     string title;
     int officeNumber;
-   CourseList[] courseList; 
+    CourseList[] courseList; 
 };
 
 //CourseList[] courseList;
