@@ -3,15 +3,15 @@ import ballerina/io;
 library_serviceClient ep = check new ("http://localhost:9090");
 
 public function main() returns error? {
-    Book addBookRequest = {title: "ballerina", author_1: "ballerina", author_2: "ballerina", location: "ballerina", ISBN: "ballerina", status: true};
+    Book addBookRequest = {title: "Mpho Search", author_1: "Sandra Braude", author_2: "Thandeka Sibanda", location: "Shelf A", ISBN: "9780195709612", status: true};
     AddBookResponse addBookResponse = check ep->addBook(addBookRequest);
     io:println(addBookResponse);
 
-    Book updateBookRequest = {title: "ballerina", author_1: "ballerina", author_2: "ballerina", location: "ballerina", ISBN: "ballerina", status: true};
+    Book updateBookRequest = {title: "The Great Gatsby Third Edition", author_1: "F.Scott Fitzgerald, location: "Shelf B", ISBN: "9780743273565", status: true};
 
-    Book removeBookRequest = {title: "ballerina", author_1: "ballerina", author_2: "ballerina", location: "ballerina", ISBN: "ballerina", status: true};
+    Book removeBookRequest = {title: "pride and Prejudice", author_1: "Jane Austen",  location: "Shelf C", ISBN: "9781853260001", status: true};
 
-    Book locateBookRequest = {title: "ballerina", author_1: "ballerina", author_2: "ballerina", location: "ballerina", ISBN: "ballerina", status: true};
+    Book locateBookRequest = {title: "Queen of Hearts", author_1: "Lollita Moyo", author_2: "Joseph Waters", location: "Shelf A", ISBN: "9789653425778", status: false};
     LocateBookResponse locateBookResponse = check ep->locateBook(locateBookRequest);
     io:println(locateBookResponse);
 
