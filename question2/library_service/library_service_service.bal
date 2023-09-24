@@ -24,7 +24,7 @@ type BorrowBook record {|
 |};
 
 table<BookRecord> key(ISBN) booksTable = table [
-    {title: "The Great Gatbsy", author_1: "F.Scott Fitzgerald", location: "Shelf a", ISBN: "9780743273565", status: true},
+    {title: "The Great Gatbsy", author_1: "F.Scott Fitzgerald", location: "Shelf a", ISBN: "1", status: true},
     {title: "Moby Dick", author_1: "Herman Melville", location: "Shelf B", ISBN: "9781853260087", status: false},
     {title: "pride and Prejudice", author_1: "Jane Austen", author_2: "Another Author", location: "Shelf C", ISBN: "9781853260001", status: true}
 ];
