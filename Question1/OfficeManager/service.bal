@@ -12,11 +12,8 @@ public table<Staff> key(staffNumber) staffTable = table [
 # bound to port `9090`.
 service / on new http:Listener(9090) {
 
-    # A resource for generating greetings
-    # + name - the input string name
-    # + return - string name with hello message or error
     resource function post addLecturer(@http:Payload Staff lecturer) returns http:Response|error {
-        if lecturer.staffNumber is "" {
+        if lecturer.staffNumber is 0 {
             return error("staffNumber should not be empty!");
         }
         else if lecturer.staffName is "" {
@@ -25,35 +22,25 @@ service / on new http:Listener(9090) {
         else if lecturer.title is "" {
             return error("title should not be empty!");
         }
-        if officeNumber === 0 {
-        else if lecturer.officeNumber is "" {
+        else if lecturer.officeNumber is 0 {
             return error("officeNumber should not be empty!");
         }
-        if lecturer.courseList.length()===0 {
+        if lecturer.courseList.length() === 0 {
             return error("courseList should not be empty!");
-            }
+        }
         else {
-            staffTable.add(lecturer);
-            http:Response post_resp = new;
-            post_resp.statusCode = http:STATUS_CREATED;
-            post_resp.setPayload({id: lecturer.staffNumber});
-            return post_resp;
+            error? addNewStaff = staffTable.add(lecturer);
+            if (addNewStaff is error) {
+                return error("");
+            } else {
+                staffTable.add(lecturer);
+                http:Response post_resp = new;
+                post_resp.statusCode = http:STATUS_CREATED;
+                post_resp.setPayload({id: lecturer.staffNumber});
+                return post_resp;
+            }
         }
 
-        //  lecturer object created
-        Staff newLecturer = {
-            staffNumber: staffNumber,
-            staffName: staffName,
-            title: title,
-            officeNumber: officeNumber,
-            courseList: [courseList]
-        };
-
-        error? addNewStaff = staffTable.add(newLecturer);
-        if(addNewStaff is error){
-            return error("");
-        }
-        return newLecturer;
     }
 
     // A resource for retrieving a list of all lecturers within the faculty
@@ -62,27 +49,26 @@ service / on new http:Listener(9090) {
     }
 
     // A resource for retrieving all the lecturers that teach a certain course
-    resource function get courseLecturer(string courseCode) returns Staff[]|error {
-        Staff[] staffList;
+    resource function get courseLecturer/[string searchCourse]() returns Staff[]|error {
+
+        Staff[] staffList = [];
         foreach Staff staff in staffTable {
-            // if staff.courseList.indexOf({courseCode:courseCode,courseName: "", NQFLevel: 0}) != () {
-            //     staffList.push(staff);
-            // }
-            var staffcourse = staff.courseList.filter((courseValue)=> courseValue.courseName === courseCode);
-        if staffcourse.length()>0{
+
+            var staffcourse = staff.courseList.filter((courseValue) => courseValue.courseCode === searchCourse);
+            if staffcourse.length() > 0 {
                 staffList.push(staff);
             }
         }
         if staffList.length() == 0 {
-            return error(string `${courseCode} does not have any lecturers assigned to it!`);
+            return error(string `${searchCourse} does not have any lecturers assigned to it!`);
         } else {
             return staffList;
         }
     }
 
     // A resource for retrieving all the lecturers that sit in the same office
-    resource function get officeLecturer(int officeNumber) returns Staff[]|error {
-        Staff[] staffList;
+    resource function get officeLecturer/[int officeNumber]() returns Staff[]|error {
+        Staff[] staffList = [];
         foreach Staff staff in staffTable {
             if staff.officeNumber == officeNumber {
                 staffList.push(staff);
@@ -95,41 +81,57 @@ service / on new http:Listener(9090) {
         }
     }
     // A resource for getting a lecturer by staff number.
-    resource function get Lecturer/[int staffNumber] () returns Staff?|error {
+    resource function get Lecturer/[int staffNumber]() returns Staff?|error {
         // Get the lecturer from the table.
         Staff? lecturer = staffTable[staffNumber];
         if lecturer is () {
             return error(string `Lecturer with staff number ${staffNumber} staffNumber not found!`);
-        }else {
-        // Return the lecturer.
-        return lecturer;
+        } else {
+            // Return the lecturer.
+            return lecturer;
+        }
     }
-
     // resource function for updating an existing lecturers information
-    resource function put updateLecturer(int staffNumber, string staffName, string title, string officeNumber, CourseList[] courseList) returns Staff|error {
-        // Get the lecturer from the table.
-        Staff? lecturer = staffTable[staffNumber];
+    resource function put updateLecturer(@http:Payload Staff lecturer) returns http:Response {
 
-        // If the lecturer is not found, return an error.
-        if lecturer is error {
-            return error(string `Lecturer with staff number ${staffNumber} staffNumber not found!`);
+        // Get the lecturer from the table.
+        boolean exists = staffTable.hasKey(lecturer.staffNumber);
+        http:Response put_Response = new;
+
+        if exists {
+            //update lecturer
+            staffTable.put(lecturer);
+            //return success reponse
+            put_Response.statusCode = http:STATUS_ACCEPTED;
+            put_Response.setPayload("Lecturer Updated Successfully");
+            return put_Response;
+        }else {
+            //return error
+
+             put_Response.statusCode = http:STATUS_NOT_FOUND;
+            put_Response.setPayload("Lecturer not found");
+            return put_Response;
         }
     }
-
-    resource function delete Lecturer(int staffNumber) returns error? {
+    resource function delete Lecturer/[int staffNumber]() returns http:Response {
         // Get the lecturer from the table.
         Staff? lecturer = staffTable[staffNumber];
+        http:Response del_resp = new;
 
         // If the lecturer is not found, return an error.
-        if lecturer is error {
-            return error(string `Lecturer with staff number ${staffNumber} staffNumber not found`);
+        if lecturer == () {
+            del_resp.statusCode = http:STATUS_NOT_FOUND;
+            del_resp.setPayload("Not Found");
+            return del_resp;
+        } else {
+            // Remove the lecturer from the table.
+            Staff deleted = staffTable.remove(staffNumber);
+            // Return success.
+            del_resp.statusCode = http:STATUS_OK;
+            del_resp.setPayload("Sucessfully deleted lecturer with staff number:" + deleted.staffNumber.toString());
+            return del_resp;
         }
 
-        // Remove the lecturer from the table.
-        Staff remove = staffTable.remove(staffNumber);
-
-        // Return success.
-        return null;
     }
 
 }

@@ -1,4 +1,4 @@
-type Staff record {
+public type Staff record {
     readonly int staffNumber;
     string staffName;
     string title;
@@ -7,7 +7,7 @@ type Staff record {
 };
 
 //CourseList[] courseList;
-type CourseList record {
+public type CourseList record {
     string courseCode;
     string courseName;
     int NQFLevel;
