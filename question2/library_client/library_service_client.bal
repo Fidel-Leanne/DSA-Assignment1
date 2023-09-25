@@ -2,6 +2,10 @@ import ballerina/io;
 
 library_serviceClient ep = check new ("http://localhost:9090");
 
+type user record {
+
+};
+
 public function main() returns error? {
     //     Book addBookRequest = {title: "ballerina", author_1: "ballerina", author_2: "ballerina", location: "ballerina", ISBN: "ballerina", status: true};
     //     AddBookResponse addBookResponse = check ep->addBook(addBookRequest);
@@ -37,6 +41,11 @@ public function main() returns error? {
         io:println("1. Add Book");
         io:println("2. Update Book");
         io:println("3. Remove Book");
+        io:println("4. Locate Book");
+        io:println("5. Borrow Book");
+        io:println("6. Create User");
+        io:println("7. List Available Books");
+
         // ... Add other options ...
         io:println("9. Exit");
 
@@ -93,7 +102,69 @@ public function main() returns error? {
                 io:println("Title:", book.title, "ISBN:", book.ISBN);
             }
         }
-        // ... Handle other choices ...
+        else if (choice == "4") {
+            // Locate a book
+
+            string isbnToLocate = io:readln("Enter the ISBN of the book you wish to locate: ");
+            Book locateRequest = {ISBN: isbnToLocate};
+            LocateBookResponse|error locateResult = ep->locateBook(locateRequest);
+
+            if (locateResult is LocateBookResponse) {
+                io:println("The book is located at:", locateResult.location);
+            } else {
+                io:println("Error locating the book:", locateResult.message());
+            }
+
+        } else if (choice == "5") {
+            // Borrow a book
+
+            string userID = io:readln("Enter your user ID: ");
+            string isbnToBorrow = io:readln("Enter the ISBN of the book you wish to borrow: ");
+            BorrowBookRequest borrowRequest = {userID: userID, ISBN: isbnToBorrow};
+
+            string|error borrowResult = ep->borrowBook(borrowRequest);
+
+            if (borrowResult is string) {
+                io:println(borrowResult);
+            } else {
+                io:println("Error borrowing the book:", borrowResult.message());
+            }
+        }
+        //else if (choice == "6") {
+        //     // Create a user
+
+        //     string userID = io:readln("Enter user ID: ");
+        //     string profile = io:readln("Enter user profile (student or librarian): ");
+        //     user newUser = {userID, profile};
+
+        //     User|error convertedUser = newUser.cloneWithType(User);
+        //     if (convertedUser is User) {
+        //         CreateUserStreamingClient userClient = check ep->createUser();
+        //         check userClient->sendUser(convertedUser);
+        //         check userClient->complete();
+        //         string? createUserResponse = check userClient->receiveString();
+        //         io:println(createUserResponse);
+        //     } else {
+        //         io:println("Failed to convert user data to the expected type.");
+        //     }
+        // } 
+        else if (choice == "7") {
+            // List available books
+
+            stream<Book, error?>|error availableBooksResponse = ep->listAvailableBooks();
+
+            if (availableBooksResponse is stream<Book, error?>) {
+                _ = check availableBooksResponse.forEach(function(Book book) {
+                    io:println(book);
+                });
+            } else {
+                io:println("Error listing available books:", availableBooksResponse.message());
+            }
+
+        }
+
+        // ... Rest of your code ...
+
         else if (choice == "9") {
             break;
         } else {

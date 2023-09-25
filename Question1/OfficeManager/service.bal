@@ -1,6 +1,6 @@
 import ballerina/http;
 
-public table<Staff> key(staffNumber) staffTable = table [
+table<Staff> key(staffNumber) staffTable = table [
     {staffNumber: 100, staffName: "Steven Tjiraso", courseList: [{courseCode: "DSA511S", courseName: "Data Structures & Algorithms", NQFLevel: 5}, {courseCode: "ICG511S", courseName: "Introduction to Computing", NQFLevel: 5}], officeNumber: 201, title: "Mr"},
     {staffNumber: 102, staffName: "Ndinelago Nashandi", courseList: [{courseCode: "DSA611S", courseName: "Distributed Systems", NQFLevel: 6}], officeNumber: 101, title: "Ms"},
     {staffNumber: 103, staffName: "Gereon Kapuire", courseList: [{courseCode: "DPG511S", courseName: "Database Programming", NQFLevel: 5}], officeNumber: 111, title: "Dr"},
@@ -83,7 +83,6 @@ service / on new http:Listener(9090) {
         http:Response getResponse = new;
         getResponse.statusCode = http:STATUS_OK;
 
-
         foreach Staff staff in staffTable {
             if staff.officeNumber == officeNumber {
                 staffList.push(staff);
@@ -109,7 +108,6 @@ service / on new http:Listener(9090) {
         http:Response getResponse = new;
         getResponse.statusCode = http:STATUS_OK;
 
-
         if lecturer is () {
             getResponse.statusCode = http:STATUS_NOT_FOUND;
             getResponse.setPayload(string `Lecturer with staff number ${staffNumber} staffNumber not found!`);
@@ -121,7 +119,7 @@ service / on new http:Listener(9090) {
             return getResponse;
         }
     }
-    
+
     // resource function for updating an existing lecturers information
     resource function put updateLecturer(@http:Payload Staff lecturer) returns http:Response {
 
@@ -136,10 +134,10 @@ service / on new http:Listener(9090) {
             put_Response.statusCode = http:STATUS_ACCEPTED;
             put_Response.setPayload("Lecturer Updated Successfully");
             return put_Response;
-        }else {
+        } else {
             //return error
 
-             put_Response.statusCode = http:STATUS_NOT_FOUND;
+            put_Response.statusCode = http:STATUS_NOT_FOUND;
             put_Response.setPayload("Lecturer not found");
             return put_Response;
         }
