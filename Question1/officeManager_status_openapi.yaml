@@ -1,9 +1,9 @@
 openapi: 3.0.1
 info:
-  title: Service Openapi Yaml
+  title: OfficeManager Status
   version: 0.1.0
 servers:
-- url: "{server}:{port}/"
+- url: "{server}:{port}/officeManager/status"
   variables:
     server:
       default: http://localhost

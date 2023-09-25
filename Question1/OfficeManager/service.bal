@@ -10,7 +10,7 @@ public table<Staff> key(staffNumber) staffTable = table [
 
 # A service representing a network-accessible API
 # bound to port `9090`.
-service / on new http:Listener(9090) {
+service /officeManager/status on new http:Listener(9090) {
 
     resource function post addLecturer(@http:Payload Staff lecturer) returns http:Response|error {
         if lecturer.staffNumber is 0 {
@@ -47,7 +47,7 @@ service / on new http:Listener(9090) {
     resource function get allLecturers() returns http:Response {
         http:Response getResponse = new;
         getResponse.statusCode = http:STATUS_OK;
-        getResponse.setPayload(staffTable.toJson());
+        getResponse.setPayload(staffTable.toArray().toJson());
         return getResponse;
     }
 
