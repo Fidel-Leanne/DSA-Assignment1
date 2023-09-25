@@ -75,7 +75,7 @@ public type ErrorPayload record {
 };
 
 public type Staff record {
-    int staffNumber;
+    readonly int staffNumber;
     string staffName;
     string title;
     int officeNumber;
